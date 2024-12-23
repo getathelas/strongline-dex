@@ -302,7 +302,7 @@ func (c *googleConnector) getGroups(email string, fetchTransitiveGroupMembership
 
 	for {
 		groupsList, err = adminSrv.Groups.List().
-			UserKey(email).PageToken(groupsList.NextPageToken).Do()
+			UserKey(email).Domain(domain).PageToken(groupsList.NextPageToken).Do()
 		if err != nil {
 			return nil, fmt.Errorf("could not list groups: %v", err)
 		}
