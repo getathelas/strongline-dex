@@ -1,0 +1,24 @@
+name: Publish Dex
+on:
+  push:
+    tags:
+      - "*"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Publish Dex Image (Staging)
+        uses: ./.github/actions/publish-dex-image
+        with:
+          docker-file: Dockerfile
+          image-name: strongline-dex
+          image-tag: ${{ github.ref_name }}
+          repo-name: strongline-docker-repo-staging
+          service-account: ${{ secrets.GOOGLE_CLOUD_BUILD_ARTIFACTS_SERVICE_ACCOUNT }}
